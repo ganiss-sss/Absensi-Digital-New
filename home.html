@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Halaman Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background-color: #4ba3c7;
+      color: white;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-info strong {
+      font-size: 16px;
+    }
+
+    .user-info span {
+      font-size: 14px;
+    }
+
+    .user-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #337ea0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-icon i {
+      font-size: 20px;
+    }
+
+    /* Clock */
+    .clock {
+      text-align: center;
+      margin: 30px 0 10px;
+    }
+
+    .clock h1 {
+      font-size: 48px;
+      margin: 0;
+      color: #000;
+    }
+
+    .clock p {
+      font-size: 18px;
+      color: #333;
+      margin-top: 5px;
+    }
+
+    /* Menu Grid */
+    .grid-menu {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .menu-item {
+      background-color: #4ba3c7;
+      color: white;
+      border-radius: 12px;
+      padding: 30px 0;
+      text-align: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .menu-item i {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      background-color: #4ba3c7;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .bottom-nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .bottom-nav a i {
+      font-size: 20px;
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .grid-menu {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="user-info">
+      <strong id="namaUser">Nama Lengkap</strong>
+      <span id="kelasUser">Jabatan / NISN</span>
+    </div>
+    <div class="user-icon">
+      <i class="fa fa-user"></i>
+    </div>
+  </div>
+
+  <!-- Jam -->
+  <div class="clock">
+    <h1 id="jam">--:--</h1>
+    <p id="hari">Hari</p>
+  </div>
+
+  <!-- Menu -->
+  <div class="grid-menu">
+    <div class="menu-item"><i class="fa fa-user-plus"></i>Hadir</div>
+    <div class="menu-item"><i class="fa fa-face-frown"></i>Sakit</div>
+    <div class="menu-item"><i class="fa fa-envelope"></i>Izin</div>
+    <div class="menu-item"><i class="fa fa-id-card"></i>ID Card</div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="home.html" class="active"><i class="fa fa-home"></i>Home</a>
+    <a href="izin.html"><i class="fa fa-envelope-open-text"></i>Izin</a>
+    <a href="scan.html"><i class="fa fa-calendar-check"></i>Absent</a>
+    <a href="recap.html"><i class="fa fa-list-alt"></i>Recap</a>
+    <a href="profile.html"><i class="fa fa-user-circle"></i>Profil</a>
+  </div>
+
+  <script>
+    // Ambil data dari localStorage
+    const nama = localStorage.getItem("nama") || "Nama Lengkap";
+    const kelas = localStorage.getItem("kelas") || "Kelas";
+    const nisn = localStorage.getItem("nisn") || "NISN";
+
+    document.getElementById("namaUser").innerText = nama;
+    document.getElementById("kelasUser").innerText = `${kelas} / ${nisn}`;
+
+    // Tampilkan Jam dan Hari
+    function updateClock() {
+      const now = new Date();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById("jam").innerText = `${jam}.${menit}`;
+
+      const hariList = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      document.getElementById("hari").innerText = hariList[now.getDay()];
+    }
+
+    updateClock();
+    setInterval(updateClock, 60000); // Update setiap 1 menit
+  </script>
+
+</body>
+</html>

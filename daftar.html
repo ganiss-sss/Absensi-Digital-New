@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pendaftaran Siswa</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #4aa3c5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #e6e6e6;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #4aa3c5;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 30px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      background-color: #4aa3c5;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #2f7e9e;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Pendaftaran</h2>
+    <form id="daftarForm">
+      <input type="text" id="nama" class="input-field" placeholder="Nama Lengkap" required />
+      <input type="text" id="nisn" class="input-field" placeholder="NISN" required />
+      <input type="text" id="kelas" class="input-field" placeholder="Kelas (contoh: 12 MIPA B)" required />
+      <button type="submit">Daftar</button>
+    </form>
+    <div id="message" class="message"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+  <script>
+    // Konfigurasi Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBr4DNrjgpg1z_VVuP_uBJEs4iy0zkLOig",
+      authDomain: "absensi-digital-199d2.firebaseapp.com",
+      databaseURL: "https://absensi-digital-199d2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "absensi-digital-199d2",
+      storageBucket: "absensi-digital-199d2.appspot.com",
+      messagingSenderId: "387823714427",
+      appId: "1:387823714427:web:6938dd60c1fcf1a87662de"
+    };
+
+    // Inisialisasi Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Handle submit form
+    document.getElementById("daftarForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const nama = document.getElementById("nama").value.trim();
+      const nisn = document.getElementById("nisn").value.trim();
+      const kelas = document.getElementById("kelas").value.trim();
+
+      if (!nama || !nisn || !kelas) {
+        document.getElementById("message").innerHTML = `<div class="error">❌ Semua kolom wajib diisi.</div>`;
+        return;
+      }
+
+      try {
+        // Simpan ke Firestore
+        await db.collection("siswa").doc(nisn).set({
+          Nama: nama,
+          NISN: nisn,
+          Kelas: kelas
+        });
+
+        // Simpan juga ke localStorage
+        localStorage.setItem("nama", nama);
+        localStorage.setItem("nisn", nisn);
+        localStorage.setItem("kelas", kelas);
+
+        // Tampilkan pesan berhasil
+        document.getElementById("message").innerHTML = `<div class="success">✅ Berhasil! Mengarahkan ke halaman home...</div>`;
+
+        // Tunggu 1 detik lalu redirect
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1000);
+
+      } catch (error) {
+        document.getElementById("message").innerHTML = `<div class="error">❌ Gagal: ${error.message}</div>`;
+      }
+    });
+  </script>
+
+</body>
+</html>
